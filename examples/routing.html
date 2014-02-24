@@ -1,0 +1,49 @@
+<html ng-app="MyApp">
+<link rel="stylesheet" href="css/styles.css">
+<body>
+  <div ng-view></div>
+
+<script src="js/angular.js"></script>
+<script>
+var MyApp = angular.module('MyApp',[]);
+MyApp.config(function($routeProvider) {
+  $routeProvider.
+    when('/', {templateUrl: 'partials/list.html',  controller: 'ListCtrl'}).
+    when('/detail/:id', {templateUrl: 'partials/detail.html', controller: 'DetailCtrl'}).
+    otherwise({redirectTo: '/'});
+});
+
+MyApp.service('BandService', function(){
+	var data = [
+    {name:'Robert Trujillo', plays:'Bajo'},
+    {name:'Kirk Hammett', plays:'Guitarra solista'},
+    {name:'James Hetfield', plays:'Guitarra ritmica'},
+    {name:'Lars Ulrich', plays:'Bateria'}
+	];
+	var created = new Date();
+
+	this.list = function(){
+		return data;
+	},
+	this.get = function(index){
+		return data[index];
+	},
+	this.created = function(){
+		return created;
+	}
+});
+
+MyApp.controller('ListCtrl', function($scope,BandService){
+  $scope.band = BandService.list();
+})
+
+MyApp.controller('DetailCtrl', function($scope,$routeParams,BandService){
+	$scope.params = $routeParams;
+	$scope.member = BandService.get($routeParams.id);
+	$scope.controllerborn = new Date();
+	$scope.serviceborn = BandService.created();
+});
+</script>
+
+</body>
+</html>

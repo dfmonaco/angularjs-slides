@@ -1,0 +1,31 @@
+<html ng-app>
+<link rel="stylesheet" href="css/styles.css">
+<body id='ctrl' ng-controller="MyCtrl">
+
+
+  <div style="width:400px; float:right">
+    <input type="text" ng-model="search.name" placeholder="por nombre...">
+    <input type="text" ng-model="search.plays" placeholder="por instrumento...">
+  </div>
+
+  <ul>
+    <li ng-repeat="who in band | orderBy: 'name' | filter: search">
+    {{who.name}} - {{who.plays}}
+    </li>
+  </ul>
+
+
+<script src="js/angular.js"></script>
+<script>
+function MyCtrl ($scope) {
+  $scope.band = [
+    {name:'Robert Trujillo', plays:'Bajo'},
+    {name:'Kirk Hammett', plays:'Guitarra solista'},
+    {name:'James Hetfield', plays:'Guitarra ritmica'},
+    {name:'Lars Ulrich', plays:'Bateria'}
+  ];
+}
+</script>
+
+</body>
+</html>

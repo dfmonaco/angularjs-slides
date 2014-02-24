@@ -1,0 +1,19 @@
+<html ng-app>
+<link rel="stylesheet" href="css/styles.css">
+<body>
+
+<div id='ctrl' ng-app ng-controller="MyCtrl">
+uppercase: {{sometext | uppercase}}<br>
+lowercase: {{sometext | lowercase}}<br>
+date: {{somedate | date:'dd-MM-yyyy HH:mm:ss'}}<br>
+</div>
+<script src="js/angular.js"></script>
+<script>
+function MyCtrl ($scope) {
+  $scope.sometext = "Hello";
+  $scope.somedate = new Date();
+}
+</script>
+
+</body>
+</html>

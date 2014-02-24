@@ -1,0 +1,39 @@
+<html>
+<link rel="stylesheet" href="css/styles.css">
+<body>
+
+<div ng-app="MyApp" ng-controller="MyCtrl">
+  <ul>
+    <li ng-repeat="member in band">
+    {{member.name}} - {{member.plays}}</li>
+  </ul>
+  <strong> {{errorMessage}} </strong>
+</div>
+
+<script src="js/angular.js"></script>
+<script>
+var app = angular.module("MyApp", []);
+app.service("BandService", function ($http, $q) {
+  this.list = function (){
+    var deferred = $q.defer();
+	$http.get('data.json').success(function (data){
+	  deferred.resolve(data);
+	}).error(function (error){
+	  deferred.reject('Oops algo salio mal: ' + error);
+	});
+    return deferred.promise;
+  }
+});
+
+app.controller('MyCtrl', function ($scope,BandService){
+    BandService.list().then(function (data){
+      $scope.band = data;
+    },
+    function (error){
+      $scope.errorMessage = error;
+    });
+});
+</script>
+
+</body>
+</html>

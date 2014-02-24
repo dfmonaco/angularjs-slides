@@ -1,0 +1,516 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Introduccion a Angular.js</title>
+
+		<meta name="description" content="Introduccion a Angular.js">
+		<meta name="author" content="Diego Mónaco">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<link rel="stylesheet" href="css/reveal.min.css">
+		<link rel="stylesheet" href="css/theme/default.css" id="theme">
+
+		<!-- For syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+        <!-- custom styles -->
+        <link rel="stylesheet" href="css/presentation.css">
+
+		<!-- If the query includes 'print-pdf', use the PDF print sheet -->
+		<script>
+			document.write( '<link rel="stylesheet" href="css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+
+	</head>
+
+<body>
+
+<div class="reveal">
+    <div class="slides">
+
+		<section data-state="title">
+            <h1>Introducción a</h1>
+			<img src="images/AngularJS-large.png" alt="AngularJS">
+		</section>
+
+		<section data-state="what">
+			<h1>Que es AngularJS?</h1>
+              <div class="fragment">
+				<blockquote cite="http://angularjs.org/">
+                    HTML enhanced for web apps!
+				</blockquote>
+				<small>http://angularjs.org/</small>
+			</div>
+                <ul>
+                    <li class="fragment">Browser mejorado especialmente adaptado para el desarrollo de aplicaciones web.</li>
+                    <li class="fragment">No hay que seguir ninguna API, nada que heredar, nada que llamar, solo Javascript.</li>
+                    <li class="fragment">Enlace de datos bi-direccional hace que el modelo de datos sea la unica fuente de verdad.</li>
+                    <li class="fragment">Permite al desarrollador extender el vocabulario del browser y convertir el HTML en un DSL.</li>
+                    <li class="fragment">Transforma el HTML en una declaracion descriptiva del funcionamiento de la aplicación.</li>
+                </ul>
+
+		</section>
+		<section data-state="example">
+            <h1>Ejemplo: Lista de Tareas</h1>
+
+			<iframe class="fragment" src="examples/helloworld.html"></iframe>
+
+		</section>
+
+		<section data-state="example">
+
+			<pre><code>&lt;html ng-app&gt;
+&lt;body id=&quot;ctrl&quot; ng-controller=&quot;TodoCtrl&quot;&gt;
+
+  &lt;ul&gt;
+    &lt;li ng-repeat=&quot;todo in todos | orderBy: [&#39;done&#39;,&#39;text&#39;]&quot;&gt;
+      &lt;input type=&quot;checkbox&quot; ng-model=&quot;todo.done&quot;&gt;
+      &lt;span class=&quot;done-{{todo.done}}&quot;&gt;{{todo.text}}&lt;/span&gt;
+    &lt;/li&gt;
+  &lt;/ul&gt;
+
+  &lt;form ng-submit=&quot;addTodo()&quot;&gt;
+    &lt;input type=&quot;text&quot; ng-model=&quot;todoText&quot; placeholder=&quot;new todo&quot;&gt;
+    &lt;input type=&quot;submit&quot; value=&quot;add&quot;&gt;
+  &lt;/form&gt;
+
+  &lt;script src=&quot;js/angular.js&quot;&gt;&lt;/script&gt;
+  &lt;script&gt;
+  function TodoCtrl ($scope) {
+    $scope.todos = [
+      {text:&#39;preparar slides&#39;, done:true},
+      {text:&#39;dar charla&#39;, done:false},
+      {text:&#39;tomar cerveza&#39;, done:false}
+    ];
+    $scope.addTodo = function (){
+      $scope.todos.push({text:$scope.todoText, done:false});
+      $scope.todoText = &#39;&#39;;
+    }
+  }
+  &lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+            <div class="fragment fade-in">
+                <div class="box-highlight fragment fade-out" style="width: 680px;height: 162px;top: 383px;left: 48px;">&nbsp;
+                    <span>Modelo</span>
+                </div>
+            </div>
+
+            <div class="fragment fade-in">
+                <div class="box-highlight fragment fade-out" style="width: 700px;height: 209px;top: 359px;left: 40px;">&nbsp;
+                    <span>Controlador</span>
+                </div>
+            </div>
+
+            <div class="fragment fade-in">
+                <div class="box-highlight fragment fade-out" style="width: 750px;height: 209px;top: 90px;left: 40px;">
+                    <span>Vista</span>
+                </div>
+            </div>
+
+			<p class="caption fragment" style="top: 180px; left: 545px;">&uarr; Template</p>
+			<p class="caption fragment" style="top: 350px; left: 355px;">&larr; Inyeccion de Dependecias</p>
+			<div class="fragment">
+				<p class="caption" style="top: 522px; left: 490px;">&uarr; Enlace de datos</p>
+				<p class="caption" style="top: 187px; left: 238px;">Enlace de datos &darr;</p>
+			</div>
+			<p class="caption fragment" style="top: 62px; left: 445px;">&darr; Filtro</p>
+			<p class="caption fragment" style="top: 62px; left: 118px;">&darr; Directiva</p>
+
+		</section>
+
+
+		<section data-state="section-title">
+            <h1>Enlace de Datos bidireccional</h1>
+		</section>
+
+        <section data-state="example">
+			<pre><code>&lt;html ng-app&gt;
+  &lt;body ng-controller="MyCtrl"&gt;
+
+    Enter your name: &lt;input type="text" ng-model="name"&gt;
+    &lt;p&gt;Hello {{name}}!&lt;/p&gt;
+
+    &lt;button ng-click=&quot;reset()&quot;&gt;reset&lt;/button&gt;
+
+    &lt;script src="angular.js"&gt;&lt;/script&gt;
+    &lt;script&gt;
+      function MyCtrl ($scope){
+        $scope.name = "Diego";
+        $scope.reset = function (){
+          $scope.name = "";
+        }
+      }
+    &lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+            <iframe class="fragment" src="examples/databinding.html"></iframe>
+        </section>
+
+		<section data-state="example">
+            <h1>Usando jQuery</h1>
+			<div class="fragment">
+				<pre><code>&lt;html&gt;
+  &lt;body&gt;
+    Enter your name: &lt;input type=&quot;text&quot; id=&quot;model-name&quot;&gt;
+    &lt;p&gt;Hello &lt;span id=&quot;name&quot;&gt;&lt;/span&gt;!&lt;/p&gt;
+    &lt;button id=&quot;reset&quot;&gt;reset&lt;/button&gt;
+
+    &lt;script src=&quot;js/jquery.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script&gt;
+      jQuery(function ($){
+        function setName (msg){
+          $('#name').text(msg);
+          if ($modelname.val()!==msg){
+            $modelname.val(msg);
+          }
+        }
+        var $modelname = $('#model-name').on('keyup', function (){
+          setName($(this).val());
+        });
+        $('#reset').on('click', function (){
+          setName('');
+        });
+        setName('Diego');
+      });
+    &lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+            </div>
+		</section>
+
+		<section data-state="section-title">
+            <h1>Filtros</h1>
+		</section>
+
+		<section data-state="example">
+            <pre><code>&lt;div ng-app ng-controller=&quot;MyCtrl&quot;&gt;
+  uppercase: {{sometext | uppercase}}&lt;br&gt;
+  lowercase: {{sometext | lowercase}}&lt;br&gt;
+  date: {{somedate | date:&#39;dd-MM-yyyy HH:mm:ss&#39;}}&lt;br&gt;
+&lt;/div&gt;
+
+&lt;script src=&quot;js/angular.js&quot;&gt;&lt;/script&gt;
+
+&lt;script&gt;
+  function MyCtrl ($scope) {
+    $scope.sometext = &quot;Hola&quot;;
+    $scope.somedate = new Date();
+  }
+&lt;/script&gt;</code></pre>
+
+			<iframe class="fragment" src="examples/filter-formatting.html"></iframe>
+		</section>
+
+		<section data-state="example">
+            <pre><code>&lt;div ng-app ng-controller=&quot;MyCtrl&quot;&gt;
+  &lt;ul&gt;
+    &lt;li ng-repeat=&quot;who in band | orderBy:&#39;name&#39; | filter:search&quot;&gt;
+    {{who.name}} - {{who.plays}}&lt;/li&gt;
+  &lt;/ul&gt;
+  &lt;input type=&quot;text&quot; ng-model=&quot;search.name&quot; placeholder=&quot;por nombre...&quot;&gt;
+  &lt;input type=&quot;text&quot; ng-model=&quot;search.plays&quot; placeholder=&quot;por instrumento...&quot;&gt;
+&lt;/div&gt;
+&lt;script&gt;
+function MyCtrl ($scope) {
+  $scope.band = [
+    {name:&#39;Robert Trujillo&#39;, plays:&#39;Bajo&#39;},
+    {name:&#39;Kirk Hammett&#39;, plays:&#39;Guitarra solista&#39;},
+    {name:&#39;James Hetfield&#39;, plays:&#39;Guitarra ritmica&#39;},
+    {name:&#39;Lars Ulrich&#39;, plays:&#39;Bateria&#39;}
+  ];
+}
+&lt;/script&gt;</code></pre>
+
+			<iframe class="fragment" src="examples/filters.html"></iframe>
+
+		</section>
+		<section data-state="section-title">
+			<h1>Modulos</h1>
+		</section>
+
+		<section data-state="example">
+			<pre><code>&lt;div ng-app=&quot;MyApp&quot; ng-controller=&quot;MyCtrl&quot;&gt;
+  &lt;ul&gt;
+    &lt;li ng-repeat=&quot;who in band&quot;&gt;
+    {{who.name}} - {{who.plays}}&lt;/li&gt;
+  &lt;/ul&gt;
+&lt;/div&gt;
+
+&lt;script src=&quot;js/angular.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+var app = angular.module('MyApp', []);
+app.controller('MyCtrl', function ($scope) {
+  $scope.band = [
+    {name:&#39;Robert Trujillo&#39;, plays:&#39;Bajo&#39;},
+    {name:&#39;Kirk Hammett&#39;, plays:&#39;Guitarra solista&#39;},
+    {name:&#39;James Hetfield&#39;, plays:&#39;Guitarra ritmica&#39;},
+    {name:&#39;Lars Ulrich&#39;, plays:&#39;Bateria&#39;}
+  ];
+});
+&lt;/script&gt;</code></pre>
+			<iframe class="fragment" src="examples/modules.html"></iframe>
+
+		</section>
+
+		<section data-state="section-title">
+			<h1>Servicios e Inyeccion de Dependencias</h1>
+		</section>
+
+		<section data-state="example">
+			<pre><code class="javascript">var app = angular.module("MyApp", []);
+
+app.service("BandService", function () {
+  var band = [
+    {name:&#39;Robert Trujillo&#39;, plays:&#39;Bajo&#39;},
+    {name:&#39;Kirk Hammett&#39;, plays:&#39;Guitarra solista&#39;},
+    {name:&#39;James Hetfield&#39;, plays:&#39;Guitarra ritmica&#39;},
+    {name:&#39;Lars Ulrich&#39;, plays:&#39;Bateria&#39;}
+  ];
+  this.list = function (){
+    return band;
+  }
+});
+
+app.controller('MyCtrl', function ($scope,BandService){
+  $scope.band = BandService.list();
+});</code></pre>
+			<iframe class="fragment" src="examples/service.html"></iframe>
+		</section>
+
+		<section data-state="section-title">
+			<h1>AJAX y Promesas</h1>
+		</section>
+		<section data-state="example">
+			<pre><code class="javascript">var app = angular.module(&quot;MyApp&quot;, []);
+
+app.service(&quot;BandService&quot;, function ($http, $q) {
+  this.list = function (){
+    var deferred = $q.defer();
+    $http.get('data.json').success(function (data){
+      deferred.resolve(data);
+    }).error(function (error){
+      deferred.reject("Oops algo salio mal: " + error);
+    });
+    return deferred.promise;
+  }
+});
+
+app.controller('MyCtrl', function ($scope,BandService){
+    BandService.list().then(function (data){
+      $scope.band = data;
+    },
+    function (error){
+      $scope.errorMessage = error;
+    });
+});</code></pre>
+			<iframe class="fragment" src="examples/promises.html"></iframe>
+		</section>
+		<section data-state="section-title">
+			<h1>Validaciones</h1>
+		</section>
+		<section data-state="example">
+			<pre><code>&lt;form name=&quot;myForm&quot; ng-controller=&quot;MyCtrl&quot; novalidate ng-submit=&quot;submit()&quot;&gt;
+  &lt;input type=&quot;text&quot; ng-model=&quot;user.name&quot; required placeholder=&quot;nombre&quot;&gt;
+  &lt;input type=&quot;email&quot; ng-model=&quot;user.email&quot; required placeholder=&quot;email&quot;&gt;
+  &lt;input type=&quot;checkbox&quot; ng-model=&quot;user.child&quot;&gt; Menos de 18?
+  &lt;input type=&quot;text&quot; ng-model=&quot;user.age&quot; ng-required=&quot;user.child&quot;
+    ng-maxlength=&quot;2&quot; ng-pattern=&quot;/^[0-9]+$/&quot; placeholder=&quot;edad (si es menor de 18)&quot;&gt;
+  &lt;button ng-disabled=&quot;myForm.$invalid&quot; &gt;Enviar&lt;/button&gt;
+  &lt;p&gt;la forma es valida? {{myForm.$valid}}&lt;/p&gt;
+  &lt;pre&gt;{{user|json}}&lt;/pre&gt;
+&lt;/form&gt;
+
+&lt;script&gt;
+var app = angular.module(&quot;MyApp&quot;, []);
+
+app.controller(&#39;MyCtrl&#39;, function ($scope){
+  $scope.submit = function(){
+    alert('Enviado');
+  }
+});
+&lt;/script&gt;</code></pre>
+			<iframe class="fragment" src="examples/validation.html"></iframe>
+		</section>
+
+		<section data-state="section-title">
+			<h1>Rutas y Vistas</h1>
+		</section>
+
+		<section data-state="example">
+			<div>
+				<pre><code class="javascript">var MyApp = angular.module('MyApp',[]);
+MyApp.config(function ($routeProvider) {
+  $routeProvider.
+    when('/', {
+      templateUrl: 'partials/list.html', controller: 'ListCtrl'
+    }).when('/detail/:id', {
+      templateUrl: 'partials/detail.html', controller: 'DetailCtrl'
+    }).otherwise({redirectTo: '/'});
+});
+MyApp.controller('ListCtrl', function ($scope,BandService){
+  $scope.band = BandService.list();
+})
+MyApp.controller('DetailCtrl', function ($scope,$routeParams,BandService){
+  $scope.params = $routeParams;
+  $scope.member = BandService.get($routeParams.id);
+});</code></pre>
+				<p class="script-name" style="top:28px;">app.js</p>
+			</div>
+			<div class="fragment">
+				<pre><code class="html">&lt;ul&gt;
+  &lt;li ng-repeat=&quot;who in band | orderBy:&#39;name&#39;&quot;&gt;
+    &lt;a ng-href=&quot;#/detail/{{$index}}&quot;&gt;{{who.name}}&lt;/a&gt;
+  &lt;/li&gt;
+&lt;/ul&gt;</code></pre>
+				<p class="script-name" style="top:378px;">list.html</p>
+			</div>
+			<div class="fragment">
+				<pre><code class="html">id: {{params.id}}&lt;br&gt;
+name: {{member.name}}&lt;br&gt;
+plays: {{member.plays}}&lt;br&gt;
+&lt;a href=&quot;#/list&quot;&gt;List View&lt;/a&gt;&lt;br&gt;
+</code></pre>
+				<p class="script-name" style="top:499px;">detail.html</p>
+			</div>
+			<div class="fragment">
+				<pre><code class="html">&lt;div ng-app=&quot;MyApp&quot;&gt;
+  &lt;div ng-view&gt;&lt;/div&gt;
+&lt;/div&gt;</code></pre>
+				<p class="script-name" style="top:639px;">index.html</p>
+			</div>
+
+		</section>
+
+		<section data-state="example">
+			<iframe src="examples/routing.html"></iframe>
+		</section>
+
+		<section data-state="section-title">
+			<h1>Directivas</h1>
+		</section>
+
+		<section data-state="example">
+			<pre><code class="html">app.directive('loadingBar', function ($rootScope){
+  return {
+    link: function (scope, element, attrs){
+      element.addClass('progress progress-striped active');
+      $rootScope.$on('$routeChangeStart', function (){
+        element.fadeIn(500); //  jQuery
+      });
+      $rootScope.$on('$routeChangeSuccess', function (){
+        element.fadeOut(500); //  jQuery
+      });
+    },
+    template: '&lt;div class=&quot;bar&quot;&gt;Cargando...&lt;/div&gt;'
+  }
+});</code></pre>
+			<pre><code class="html">&lt;div ng-view&gt;&lt;/div&gt;
+&lt;div loading-bar&gt;&lt;/div&gt;</code></pre>
+			<iframe class="fragment" src="examples/simple-directive.html"></iframe>
+		</section>
+
+        <section data-state="example">
+			<pre><code class="html">var app = angular.module("MyApp", []);
+app.directive('accordion', function (){
+  return {
+    restrict: 'EA',
+    scope:{
+      title:'@'
+    },
+    templateUrl: 'directives/accordion.html',
+    transclude: true,
+    link: function(scope, element, attr){
+      scope.visible = false;
+      scope.toggleContent = function(){
+        scope.visible = !scope.visible;
+      }
+    }
+  }
+});</code></pre>
+            <p class="script-name" style="top:28px;">app.js</p>
+
+            <pre><code class="html">&lt;dl&gt;
+  &lt;dt ng-click="toggleContent()"&gt;Titulo: {{title}}&lt;/dt&gt;
+  &lt;dd ng-show="visible" ng-transclude&gt;&lt;/dd&gt;
+&lt;/dl&gt;</code></pre>
+            <p class="script-name" style="top:378px;">accordion.html</p>
+
+            <pre><code class="html">&lt;div accordion title="{{model.title}}"&gt;Contenido: {{model.content}}&lt;/div&gt;</code></pre>
+
+            <iframe class="fragment" src="examples/accordion-directive.html" style="height:200px"></iframe>
+		</section>
+
+        <section data-state="tips">
+            <h1>Tips</h1>
+                <ul>
+                    <li class="fragment">Pensar como un server-side developer: como organizo mi aplicacion en componentes desacoplados, extensibles y fáciles de testear.</li>
+                    <li class="fragment">Las vistas deben ser declarativas y establecer QUE va a pasar (no importa COMO).</li>
+                    <li class="fragment">Los modelos representan el estado de los datos.</li>
+                    <li class="fragment">Los servicios se utilizan para crear tareas reutilizables.</li>
+                    <li class="fragment">La manipulacion del DOM se hace SOLAMENTE adentro de directivas.</li>
+                    <li class="fragment">Los controladores se usan como 'pegamento' de todos estos componentes.</li>
+                    <li class="fragment"><h3>TESTING - TDD</h3></li>
+                </ul>
+        </section>
+
+        <section data-state="end">
+            <h1>Gracias!</h1>
+            <ul>
+                <li>Diego Mónaco</li>
+                <li>http://dfmonaco.github.io/</li>
+                <li>@dfmonaco</li>
+            </ul>
+        </section>
+
+    </div>
+
+</div>
+
+<script src="lib/js/head.min.js"></script>
+<script src="js/reveal.min.js"></script>
+
+<script>
+
+	// Full list of configuration options available here:
+	// https://github.com/hakimel/reveal.js#configuration
+	Reveal.initialize({
+		controls: true,
+		progress: true,
+		history: true,
+		center: true,
+		width: 1018, // 1.06x default
+		height: 742,
+
+		theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+		transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+		// Optional libraries used to extend on reveal.js
+		dependencies: [
+			{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+			{ src: 'plugin/markdown/showdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+			{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+			{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+			{ src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+			{ src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+			// { src: 'plugin/search/search.js', async: true, condition: function() { return !!document.body.classList; } }
+			// { src: 'plugin/remotes/remotes.js', async: true, condition: function() { return !!document.body.classList; } }
+		]
+	});
+
+</script>
+
+</body>
+</html>

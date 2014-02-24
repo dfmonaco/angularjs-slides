@@ -1,0 +1,35 @@
+<html ng-app="MyApp">
+<link rel="stylesheet" href="css/styles.css">
+<body>
+
+<div ng-view ng-cloak></div>
+<div loading-bar></div>
+
+<script src="js/jquery-1.9.1.min.js"></script>
+<script src="js/angular.js"></script>
+<script>
+var app = angular.module("MyApp", []);
+app.config(function($routeProvider) {
+  $routeProvider.
+    when('/', {template: '<h1>Lista</h1><p><a href="#/detail">cambiar a vista de detalle &raquo;</a></p>'}).
+    when('/detail', {template: '<h1>Detalle</h1><p><a href="#/">cambiar a vista de lista &raquo;</a></p>'}).
+    otherwise({redirectTo: '/'});
+});
+app.directive('loadingBar', function ($rootScope){
+  return {
+    link: function(scope, element, attrs){
+	  element.addClass('progress progress-striped active'); // puede usar jQuery si esta cargado
+	  $rootScope.$on('$routeChangeStart', function(){
+	    element.fadeIn(1000);
+      });
+	  $rootScope.$on('$routeChangeSuccess', function(){
+        element.fadeOut(1000);
+      });
+	},
+    template: '<div class="bar" style="width: 100%;">Cargando...</div>'
+  }
+});
+</script>
+
+</body>
+</html>

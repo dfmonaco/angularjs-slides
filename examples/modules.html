@@ -1,0 +1,26 @@
+<html>
+<link rel="stylesheet" href="css/styles.css">
+<body>
+
+<div ng-app="MyApp" ng-controller="MyCtrl">
+  <ul>
+    <li ng-repeat="who in band">
+    {{who.name}} - {{who.plays}}</li>
+  </ul>
+</div>
+
+<script src="js/angular.js"></script>
+<script>
+var app = angular.module('MyApp', []);
+app.controller('MyCtrl', function ($scope) {
+$scope.band = [
+    {name:'Robert Trujillo', plays:'Bajo'},
+    {name:'Kirk Hammett', plays:'Guitarra solista'},
+    {name:'James Hetfield', plays:'Guitarra ritmica'},
+    {name:'Lars Ulrich', plays:'Bateria'}
+  ];
+});
+</script>
+
+</body>
+</html>

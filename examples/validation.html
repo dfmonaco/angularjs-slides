@@ -1,0 +1,29 @@
+<html ng-app="MyApp">
+<link rel="stylesheet" href="css/styles.css">
+<body>
+
+<form name="myForm" ng-controller="MyCtrl" novalidate ng-submit="submit()">
+	<pre style="float:right; width:400px">{{user|json}}</pre>
+
+	<input type="text" ng-model="user.name" required placeholder="nombre"><br>
+	<input type="email" ng-model="user.email" required placeholder="email"><br>
+	<input type="checkbox" ng-model="user.child"> Menor de 18?<br>
+	<input type="text" ng-model="user.age" ng-required="user.child" ng-maxlength="2" ng-pattern="/^[0-9]+$/" placeholder="edad (si es menor de 18)"><br>
+
+	<button ng-disabled="myForm.$invalid" class="btn">Enviar</button>
+	<p>la forma es valida? {{myForm.$valid}}</p>
+</form>
+
+<script src="js/angular.js"></script>
+<script>
+var app = angular.module("MyApp", []);
+
+app.controller('MyCtrl', function ($scope){
+  $scope.submit = function(){
+		alert('Enviado');
+	}
+});
+</script>
+
+</body>
+</html>
